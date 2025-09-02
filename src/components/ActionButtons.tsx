@@ -1,42 +1,28 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Asset } from "../model/Asset";
 import { PencilFill, TrashFill, EyeFill } from "react-bootstrap-icons";
-import { AssetContext, AssetContextType } from "../context/AssetContext";
 import { Button } from "react-bootstrap";
 import AssetDetail from "./DetailPopin";
+import { useDeleteAssetsMutation } from "../queries/useAssetQueries";
 
-/**
- * Action buttons props
- */
 interface ActionButtonsProps {
-  /**
-   * Asset in selected row
-   */
   asset: Asset;
-
-  /**
-   * Callback function to show/hide the form popin
-   * @param show
-   */
   setShowForm: (show: boolean) => void;
+  setSelectedAsset: (asset: Asset | undefined) => void;
 }
 
-/**
- * Action buttons component for performing action on table rows
- */
-const ActionButtons = ({ asset, setShowForm }: ActionButtonsProps) => {
+const ActionButtons = ({
+  asset,
+  setShowForm,
+  setSelectedAsset,
+}: ActionButtonsProps) => {
   const [showDetail, setShowDetail] = useState(false);
-
-  const { setSelectedAsset, deleteAsset } = useContext(
-    AssetContext,
-  ) as AssetContextType;
+  const deleteMutation = useDeleteAssetsMutation();
 
   return (
     <>
-      {/* Asset Detail Popin */}
       <AssetDetail show={showDetail} setShow={setShowDetail} asset={asset} />
       <div className="d-flex">
-        {/* Show asset detail button */}
         <Button
           className="m-1"
           onClick={() => {
@@ -46,7 +32,6 @@ const ActionButtons = ({ asset, setShowForm }: ActionButtonsProps) => {
           <EyeFill />
         </Button>
 
-        {/* Edit asset button  */}
         <Button
           className="m-1"
           variant="secondary"
@@ -58,11 +43,10 @@ const ActionButtons = ({ asset, setShowForm }: ActionButtonsProps) => {
           <PencilFill />
         </Button>
 
-        {/* Delete asset button */}
         <Button
           className="m-1"
           variant="danger"
-          onClick={() => deleteAsset(asset)}
+          onClick={() => deleteMutation.mutate(asset)}
         >
           <TrashFill />
         </Button>

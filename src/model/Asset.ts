@@ -1,7 +1,7 @@
 import { Contact } from "./Contact";
 
 export interface Asset {
+  id?: string;
   code: string;
-  activationOffset: string;
   contact: Contact;
 }

@@ -1,34 +1,13 @@
 import { useState, useEffect } from "react";
 import { InputGroup, Form } from "react-bootstrap";
 
-/**
- * Table filter props
- */
 interface TableFilterProps {
-  /**
-   * Filter initial value
-   */
   value: string | number;
-
-  /**
-   * Filter input onChange
-   */
   onChange: (value: string | number) => void;
-
-  /**
-   * Debounce for optimization, to prevent filtering each time input changes
-   */
   debounce?: number;
-
-  /**
-   * Class name
-   */
   className: string;
 }
 
-/**
- * Table filter component for filtering data on any column in table
- */
 const TableFilter = ({
   value: initialValue,
   onChange,
@@ -38,12 +17,10 @@ const TableFilter = ({
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) => {
   const [value, setValue] = useState(initialValue);
 
-  // Init input value
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  // Apply filter only at the end of timeout
   useEffect(() => {
     const timeout = setTimeout(() => {
       onChange(value);
