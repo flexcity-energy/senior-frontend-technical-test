@@ -1,0 +1,28 @@
+name: Build Frontend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable corepack (for pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --prod=false
+
+      - name: Build
+        run: pnpm build
